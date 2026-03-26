@@ -1,0 +1,115 @@
+{
+  "Nav": {
+    "boss": "보스 공략",
+    "item": "아이템 DB",
+    "map": "지도",
+    "build": "빌드"
+  },
+  "HomePage": {
+    "meta": {
+      "title": "붉은사막 DB — 보스, 아이템, 지도, 빌드",
+      "description": "붉은사막 보스 공략, 아이템 드랍 테이블, 인터랙티브 지도, 빌드 플래너를 한 곳에서."
+    },
+    "hero": {
+      "title": "붉은사막 DB",
+      "subtitle": "보스 공략부터 드랍 테이블, 빌드 플래너까지 — 한 곳에서."
+    },
+    "nav": {
+      "boss": "보스 공략",
+      "item": "아이템 DB",
+      "map": "지도",
+      "build": "빌드"
+    }
+  },
+  "BossPage": {
+    "meta": {
+      "title": "보스 공략",
+      "description": "붉은사막 전체 보스 약점, 드랍 아이템, 공략 가이드."
+    },
+    "title": "보스 공략",
+    "searchPlaceholder": "보스 이름 검색...",
+    "filters": {
+      "region": "지역",
+      "difficulty": "난이도",
+      "all": "전체"
+    },
+    "card": {
+      "drops": "드랍 아이템",
+      "weakness": "약점",
+      "difficulty": "난이도",
+      "viewGuide": "공략 보기"
+    },
+    "empty": "조건에 맞는 보스가 없습니다."
+  },
+  "ItemPage": {
+    "meta": {
+      "title": "아이템 DB",
+      "description": "붉은사막 아이템 드랍 테이블 및 제작 레시피."
+    },
+    "title": "아이템 DB",
+    "searchPlaceholder": "아이템 이름 또는 드랍처 검색...",
+    "filters": {
+      "category": "카테고리",
+      "rarity": "희귀도",
+      "all": "전체"
+    },
+    "dropSource": "드랍처",
+    "recipe": "제작 재료"
+  },
+  "MapPage": {
+    "meta": {
+      "title": "인터랙티브 지도",
+      "description": "붉은사막 수집 요소 (종, 유물, 석판) 위치 지도."
+    },
+    "title": "인터랙티브 지도",
+    "filters": {
+      "bell": "종",
+      "artifact": "유물",
+      "tablet": "석판",
+      "boss": "보스",
+      "npc": "NPC"
+    },
+    "markerCount": "{count}개 마커",
+    "contribute": "마커 제보하기"
+  },
+  "BuildPage": {
+    "meta": {
+      "title": "빌드 플래너",
+      "description": "붉은사막 캐릭터별 최적 빌드와 커뮤니티 메타 빌드."
+    },
+    "title": "빌드 플래너",
+    "character": {
+      "KLIFF": "클리프",
+      "DAMIANE": "다미아네",
+      "OONGKA": "웅카"
+    },
+    "playstyle": {
+      "MAIN_STORY": "메인 스토리",
+      "BOSS_HUNTER": "보스 사냥",
+      "COMPLETIONIST": "완전 탐색",
+      "EXPLORER": "탐험가"
+    },
+    "weapons": {
+      "SWORD_SHIELD": "검+방패",
+      "GREATSWORD": "대검",
+      "SPEAR": "창",
+      "DAGGER": "단검",
+      "BOW": "활",
+      "CROSSBOW": "석궁",
+      "STAFF": "지팡이",
+      "SCYTHE": "낫",
+      "HAMMER": "망치",
+      "FLAIL": "도리깨",
+      "TWIN_SWORDS": "쌍검",
+      "BARE_HANDS": "맨손",
+      "SPECIAL": "특수"
+    }
+  },
+  "Footer": {
+    "disclaimer": "비공식 팬 커뮤니티. Pearl Abyss와 무관합니다.",
+    "copyright": "© {year} 붉은사막 DB. All rights reserved."
+  },
+  "NotFound": {
+    "message": "페이지를 찾을 수 없습니다."
+  }
+}

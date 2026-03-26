@@ -1,0 +1,266 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// ─────────────────────────────────────────────
+// Enums
+// ─────────────────────────────────────────────
+
+enum Locale {
+  ko
+  en
+}
+
+enum WeaponType {
+  SWORD_SHIELD
+  GREATSWORD
+  SPEAR
+  DAGGER
+  BOW
+  CROSSBOW
+  STAFF
+  SCYTHE
+  HAMMER
+  FLAIL
+  TWIN_SWORDS
+  BARE_HANDS
+  SPECIAL
+}
+
+enum BossMechanic {
+  PARRY
+  COUNTER
+  CLIMB
+  SUMMON
+  ELEMENTAL
+  MOUNTED
+}
+
+enum ItemCategory {
+  WEAPON
+  ARMOR
+  MATERIAL
+  CONSUMABLE
+  ABYSS_ARTIFACT
+  COLLECTIBLE
+  QUEST
+  TRADE_GOOD
+}
+
+enum ItemRarity {
+  COMMON
+  UNCOMMON
+  RARE
+  EPIC
+  LEGENDARY
+}
+
+enum DropSourceType {
+  BOSS
+  MONSTER
+  CRAFT
+  NPC
+  EXPLORATION
+  TRADE
+}
+
+enum MarkerType {
+  BELL
+  ARTIFACT
+  TABLET
+  BOSS_SPAWN
+  NPC
+  DUNGEON
+  VIEWPOINT
+}
+
+enum Region {
+  PYWEL_CASTLE
+  THORNWOOD
+  ASHEN_WASTES
+  FROZEN_HIGHLANDS
+  VERDANT_COAST
+}
+
+enum Character {
+  KLIFF
+  DAMIANE
+  OONGKA
+}
+
+enum BuildPlaystyle {
+  MAIN_STORY
+  BOSS_HUNTER
+  COMPLETIONIST
+  EXPLORER
+}
+
+// ─────────────────────────────────────────────
+// Boss
+// ─────────────────────────────────────────────
+
+model Boss {
+  id            String         @id @default(cuid())
+  slug          String         @unique
+  nameKo        String
+  nameEn        String
+  region        Region
+  difficulty    Int            @default(1) // 1-5
+  hpEstimate    BigInt?
+  thumbnailUrl  String?
+  videoUrl      String?
+  mechanics     BossMechanic[]
+  weaknesses    WeaponType[]
+  drops         BossDrop[]
+  mapMarkers    MapMarker[]
+  communityRating Float?       @default(0)
+  viewCount     Int            @default(0)
+  isVerified    Boolean        @default(false)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  @@index([region])
+  @@index([slug])
+}
+
+model BossDrop {
+  id          String     @id @default(cuid())
+  boss        Boss       @relation(fields: [bossId], references: [id])
+  bossId      String
+  item        Item       @relation(fields: [itemId], references: [id])
+  itemId      String
+  dropRate    Float?     // null = unknown
+  quantity    Int        @default(1)
+  isGuaranteed Boolean   @default(false)
+
+  @@unique([bossId, itemId])
+  @@index([bossId])
+  @@index([itemId])
+}
+
+// ─────────────────────────────────────────────
+// Item
+// ─────────────────────────────────────────────
+
+model Item {
+  id          String       @id @default(cuid())
+  slug        String       @unique
+  nameKo      String
+  nameEn      String
+  category    ItemCategory
+  rarity      ItemRarity   @default(COMMON)
+  iconUrl     String?
+  descriptionKo String?
+  descriptionEn String?
+  codexId     String?      // Knowledge Codex 연결
+  bossDrops   BossDrop[]
+  dropSources DropSource[]
+  craftedFrom CraftRecipe[] @relation("CraftOutput")
+  usedInCraft CraftIngredient[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@index([category])
+  @@index([nameKo])
+  @@index([nameEn])
+}
+
+model DropSource {
+  id         String         @id @default(cuid())
+  item       Item           @relation(fields: [itemId], references: [id])
+  itemId     String
+  sourceType DropSourceType
+  sourceName String         // 몬스터명 or NPC명 등
+  sourceId   String?        // Boss.id 등 선택적 참조
+  region     Region?
+  dropRate   Float?
+  notes      String?
+
+  @@index([itemId])
+  @@index([sourceType])
+}
+
+model CraftRecipe {
+  id           String            @id @default(cuid())
+  outputItem   Item              @relation("CraftOutput", fields: [outputItemId], references: [id])
+  outputItemId String
+  outputQty    Int               @default(1)
+  ingredients  CraftIngredient[]
+  craftStation String?           // 제작 시설명
+  notes        String?
+}
+
+model CraftIngredient {
+  id       String      @id @default(cuid())
+  recipe   CraftRecipe @relation(fields: [recipeId], references: [id])
+  recipeId String
+  item     Item        @relation(fields: [itemId], references: [id])
+  itemId   String
+  quantity Int         @default(1)
+}
+
+// ─────────────────────────────────────────────
+// Map
+// ─────────────────────────────────────────────
+
+model MapMarker {
+  id          String     @id @default(cuid())
+  type        MarkerType
+  region      Region
+  x           Float
+  y           Float
+  nameKo      String
+  nameEn      String
+  isMissable  Boolean    @default(false)
+  boss        Boss?      @relation(fields: [bossId], references: [id])
+  bossId      String?
+  notes       String?
+  isVerified  Boolean    @default(false)
+  contributor String?    // userId
+  createdAt   DateTime   @default(now())
+
+  @@index([region])
+  @@index([type])
+}
+
+// ─────────────────────────────────────────────
+// Build
+// ─────────────────────────────────────────────
+
+model Build {
+  id             String         @id @default(cuid())
+  slug           String         @unique
+  title          String
+  character      Character
+  weaponPrimary  WeaponType
+  weaponSecondary WeaponType?
+  skills         BuildSkill[]
+  playstyle      BuildPlaystyle
+  descriptionKo  String?
+  descriptionEn  String?
+  authorId       String?
+  upvotes        Int            @default(0)
+  isVerified     Boolean        @default(false)
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  @@index([character])
+  @@index([weaponPrimary])
+}
+
+model BuildSkill {
+  id      String @id @default(cuid())
+  build   Build  @relation(fields: [buildId], references: [id])
+  buildId String
+  skillId String // 게임 내 스킬 ID
+  level   Int    @default(1)
+  order   Int    @default(0)
+
+  @@index([buildId])
+}

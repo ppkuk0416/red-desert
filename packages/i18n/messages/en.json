@@ -1,0 +1,115 @@
+{
+  "Nav": {
+    "boss": "Bosses",
+    "item": "Item DB",
+    "map": "Map",
+    "build": "Builds"
+  },
+  "HomePage": {
+    "meta": {
+      "title": "Crimson Desert DB — Bosses, Items, Map, Builds",
+      "description": "Boss guides, item drop tables, interactive map, and build planner for Crimson Desert."
+    },
+    "hero": {
+      "title": "Crimson Desert DB",
+      "subtitle": "Boss guides, drop tables, build planner — all in one place."
+    },
+    "nav": {
+      "boss": "Bosses",
+      "item": "Item DB",
+      "map": "Map",
+      "build": "Builds"
+    }
+  },
+  "BossPage": {
+    "meta": {
+      "title": "Boss Guides",
+      "description": "Weaknesses, drop tables, and strategy guides for all Crimson Desert bosses."
+    },
+    "title": "Boss Guides",
+    "searchPlaceholder": "Search bosses...",
+    "filters": {
+      "region": "Region",
+      "difficulty": "Difficulty",
+      "all": "All"
+    },
+    "card": {
+      "drops": "Drops",
+      "weakness": "Weakness",
+      "difficulty": "Difficulty",
+      "viewGuide": "View Guide"
+    },
+    "empty": "No bosses match your filters."
+  },
+  "ItemPage": {
+    "meta": {
+      "title": "Item Database",
+      "description": "Item drop tables and craft recipes for Crimson Desert."
+    },
+    "title": "Item Database",
+    "searchPlaceholder": "Search items or drop sources...",
+    "filters": {
+      "category": "Category",
+      "rarity": "Rarity",
+      "all": "All"
+    },
+    "dropSource": "Drop Source",
+    "recipe": "Craft Recipe"
+  },
+  "MapPage": {
+    "meta": {
+      "title": "Interactive Map",
+      "description": "Collectible locations (bells, artifacts, tablets) for Crimson Desert."
+    },
+    "title": "Interactive Map",
+    "filters": {
+      "bell": "Bells",
+      "artifact": "Artifacts",
+      "tablet": "Tablets",
+      "boss": "Bosses",
+      "npc": "NPCs"
+    },
+    "markerCount": "{count} markers",
+    "contribute": "Submit a marker"
+  },
+  "BuildPage": {
+    "meta": {
+      "title": "Build Planner",
+      "description": "Optimal builds and community meta for Crimson Desert characters."
+    },
+    "title": "Build Planner",
+    "character": {
+      "KLIFF": "Kliff",
+      "DAMIANE": "Damiane",
+      "OONGKA": "Oongka"
+    },
+    "playstyle": {
+      "MAIN_STORY": "Main Story",
+      "BOSS_HUNTER": "Boss Hunter",
+      "COMPLETIONIST": "Completionist",
+      "EXPLORER": "Explorer"
+    },
+    "weapons": {
+      "SWORD_SHIELD": "Sword & Shield",
+      "GREATSWORD": "Greatsword",
+      "SPEAR": "Spear",
+      "DAGGER": "Dagger",
+      "BOW": "Bow",
+      "CROSSBOW": "Crossbow",
+      "STAFF": "Staff",
+      "SCYTHE": "Scythe",
+      "HAMMER": "Hammer",
+      "FLAIL": "Flail",
+      "TWIN_SWORDS": "Twin Swords",
+      "BARE_HANDS": "Bare Hands",
+      "SPECIAL": "Special"
+    }
+  },
+  "Footer": {
+    "disclaimer": "Unofficial fan community. Not affiliated with Pearl Abyss.",
+    "copyright": "© {year} Crimson Desert DB. All rights reserved."
+  },
+  "NotFound": {
+    "message": "Page not found."
+  }
+}
