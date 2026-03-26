@@ -6,6 +6,7 @@
     "./header": "./src/header/index.tsx",
     "./footer": "./src/footer/index.tsx",
     "./components/*": "./src/components/*.tsx",
+    "./boss/card": "./src/boss/BossCard.tsx",
     "./globals.css": "./src/globals.css"
   },
   "peerDependencies": {
