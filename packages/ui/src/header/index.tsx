@@ -7,13 +7,17 @@ import { LocaleSwitcher } from '../components/LocaleSwitcher'
 
 const NAV_ITEMS = ['boss', 'item', 'map', 'build'] as const
 
-export function Header() {
+type Props = {
+  onSearchOpen?: () => void
+}
+
+export function Header({ onSearchOpen }: Props) {
   const t = useTranslations('Nav')
   const locale = useLocale()
   const [menuOpen, setMenuOpen] = useState(false)
 
   return (
-    <header className="sticky top-0 z-50 border-b border-stone-800 bg-stone-950/90 backdrop-blur-sm">
+    <header className="sticky top-0 z-40 border-b border-stone-800 bg-stone-950/90 backdrop-blur-sm">
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
         {/* 로고 */}
         <Link
@@ -39,7 +43,31 @@ export function Header() {
           ))}
         </ul>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
+          {/* 검색 버튼 */}
+          {onSearchOpen && (
+            <button
+              onClick={onSearchOpen}
+              className="hidden sm:flex items-center gap-2 rounded-lg border border-stone-700
+                         bg-stone-900 px-3 py-1.5 text-sm text-stone-500
+                         hover:border-stone-600 hover:text-stone-300 transition-colors"
+              aria-label="검색"
+            >
+              <span>🔍</span>
+              <span>검색</span>
+              <kbd className="rounded border border-stone-700 px-1.5 text-xs">⌘K</kbd>
+            </button>
+          )}
+          {onSearchOpen && (
+            <button
+              onClick={onSearchOpen}
+              className="sm:hidden p-2 rounded-lg text-stone-400 hover:bg-stone-800"
+              aria-label="검색"
+            >
+              🔍
+            </button>
+          )}
+
           <LocaleSwitcher />
 
           {/* 모바일 햄버거 */}

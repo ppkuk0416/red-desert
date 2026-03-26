@@ -16,6 +16,7 @@
     "next-intl": "^3.26.3",
     "@supabase/supabase-js": "^2.47.10",
     "@supabase/ssr": "^0.5.2",
+    "meilisearch": "^0.44.0",
     "@red-desert/db": "*",
     "@red-desert/ui": "*",
     "@red-desert/i18n": "*"
