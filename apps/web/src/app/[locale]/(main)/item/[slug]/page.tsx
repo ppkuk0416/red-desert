@@ -20,19 +20,29 @@ type Props = {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug, locale } = await params
-  const item = await getItemDetail(slug)
-  if (!item) return {}
-  const name = locale === 'ko' ? item.nameKo : item.nameEn
-  return {
-    title: `${name} — 드랍 위치 & 정보`,
-    description: `${name}의 드랍처, 획득 방법, 제작 레시피.`,
+  try {
+    const { slug, locale } = await params
+    const item = await getItemDetail(slug)
+    if (!item) return {}
+    const name = locale === 'ko' ? item.nameKo : item.nameEn
+    return {
+      title: `${name} — 드랍 위치 & 정보`,
+      description: `${name}의 드랍처, 획득 방법, 제작 레시피.`,
+    }
+  } catch {
+    return {}
   }
 }
 
+export const dynamicParams = true
+
 export async function generateStaticParams() {
-  const slugs = await getAllItemSlugs()
-  return slugs.map((slug) => ({ slug }))
+  try {
+    const slugs = await getAllItemSlugs()
+    return slugs.map((slug) => ({ slug }))
+  } catch {
+    return []
+  }
 }
 
 const DROP_SOURCE_KO: Record<string, string> = {

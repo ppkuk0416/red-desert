@@ -1,7 +1,7 @@
-import { RARITY_KO, RARITY_VARIANT, CATEGORY_ICON } from '@red-desert/ui/item/card'
+import { RARITY_KO, RARITY_VARIANT } from '@red-desert/ui/item/card'
 import { Badge } from '@red-desert/ui/components/Badge'
 import Link from 'next/link'
-import type { ItemRarity, ItemCategory } from '@red-desert/db'
+import type { ItemRarity } from '@red-desert/db'
 
 type Ingredient = {
   quantity: number

@@ -10,20 +10,31 @@ type Props = {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug, locale } = await params
-  const boss = await getBossDetail(slug)
-  if (!boss) return {}
+  try {
+    const { slug, locale } = await params
+    const boss = await getBossDetail(slug)
+    if (!boss) return {}
 
-  const name = locale === 'ko' ? boss.nameKo : boss.nameEn
-  return {
-    title: `${name} 공략`,
-    description: `${name} 보스 약점, 드랍 아이템, 공략 가이드. 메커닉: ${boss.mechanics.join(', ')}`,
+    const name = locale === 'ko' ? boss.nameKo : boss.nameEn
+    return {
+      title: `${name} 공략`,
+      description: `${name} 보스 약점, 드랍 아이템, 공략 가이드. 메커닉: ${boss.mechanics.join(', ')}`,
+    }
+  } catch {
+    return {}
   }
 }
 
+// DB 없이 빌드될 때도 안전하게 빈 배열 반환 → 런타임 on-demand 렌더링
+export const dynamicParams = true
+
 export async function generateStaticParams() {
-  const slugs = await getAllBossSlugs()
-  return slugs.map((slug) => ({ slug }))
+  try {
+    const slugs = await getAllBossSlugs()
+    return slugs.map((slug) => ({ slug }))
+  } catch {
+    return []
+  }
 }
 
 const MECHANIC_KO: Record<string, string> = {

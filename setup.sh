@@ -85,18 +85,13 @@ echo "✅ 시드 완료"
 # Step 6: Meilisearch 동기화 (선택)
 # ──────────────────────────────────────────────
 echo ""
-echo "🔍 Step 6: Meilisearch 동기화 (Meilisearch 실행 중인 경우)..."
-if curl -s "${MEILISEARCH_HOST:-http://localhost:7700}/health" | grep -q '"status":"available"'; then
-  cd apps/web
-  npx tsx ../../tools/scripts/sync-search.ts 2>/dev/null || \
-    echo "  ⚠️  동기화 실패 — 서버 실행 후 /api/admin/sync-search 호출"
-  cd ../..
-else
-  echo "  ℹ️  Meilisearch가 실행 중이지 않습니다."
-  echo "     나중에 실행: docker run -p 7700:7700 getmeili/meilisearch:latest"
-  echo "     동기화: curl -X POST http://localhost:3000/api/admin/sync-search \\"
-  echo "             -H 'Authorization: Bearer <ADMIN_SECRET>'"
-fi
+echo "🔍 Step 6: Meilisearch 동기화 안내..."
+echo "  Meilisearch 실행:"
+echo "    docker run -d -p 7700:7700 -e MEILI_MASTER_KEY=\$MEILISEARCH_API_KEY getmeili/meilisearch:latest"
+echo ""
+echo "  개발 서버 실행 후 동기화:"
+echo "    curl -X POST http://localhost:3000/api/admin/sync-search \\"
+echo "         -H 'Authorization: Bearer \$ADMIN_SECRET'"
 
 # ──────────────────────────────────────────────
 # Step 7: 헬스체크 안내
