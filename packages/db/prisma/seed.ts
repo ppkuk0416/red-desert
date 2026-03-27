@@ -185,6 +185,272 @@ async function main() {
     console.log(`  ✅ ${data.nameKo} (${data.nameEn})`)
   }
 
+  // ─────────────────────────────────────────────
+  // 지도 마커 데이터
+  // ─────────────────────────────────────────────
+  const bossMap = Object.fromEntries(
+    await Promise.all(
+      ['muraka', 'khalk', 'frost-giant-berserk', 'hadum-apostle', 'sea-serpent-boss'].map(
+        async (slug) => {
+          const b = await prisma.boss.findUnique({ where: { slug } })
+          return [slug, b?.id ?? null] as [string, string | null]
+        }
+      )
+    )
+  )
+
+  const markerData = [
+    // ── 파이웰 성 ─────────────────────────────────
+    {
+      slug: 'pywel-boss-spawn',
+      type: 'BOSS_SPAWN' as const,
+      region: 'PYWEL_CASTLE' as const,
+      x: 380, y: 320,
+      nameKo: '무라카 출몰 지점',
+      nameEn: 'Muraka Spawn',
+      bossSlug: 'muraka',
+      isMissable: false,
+      isVerified: true,
+      notes: '파이웰 성 중앙 광장. 낮 시간대 출몰.',
+    },
+    {
+      slug: 'pywel-bell-1',
+      type: 'BELL' as const,
+      region: 'PYWEL_CASTLE' as const,
+      x: 190, y: 210,
+      nameKo: '성문 입구의 종',
+      nameEn: 'Gate Bell',
+      bossSlug: null,
+      isMissable: false,
+      isVerified: true,
+      notes: null,
+    },
+    {
+      slug: 'pywel-bell-2',
+      type: 'BELL' as const,
+      region: 'PYWEL_CASTLE' as const,
+      x: 560, y: 185,
+      nameKo: '망루의 종',
+      nameEn: 'Watchtower Bell',
+      bossSlug: null,
+      isMissable: false,
+      isVerified: true,
+      notes: null,
+    },
+    {
+      slug: 'pywel-artifact-1',
+      type: 'ARTIFACT' as const,
+      region: 'PYWEL_CASTLE' as const,
+      x: 145, y: 440,
+      nameKo: '고대 검사상',
+      nameEn: 'Ancient Swordsman Statue',
+      bossSlug: null,
+      isMissable: false,
+      isVerified: true,
+      notes: '성 서편 지하 창고 내부.',
+    },
+
+    // ── 손우드 ────────────────────────────────────
+    {
+      slug: 'thornwood-boss-spawn',
+      type: 'BOSS_SPAWN' as const,
+      region: 'THORNWOOD' as const,
+      x: 980, y: 355,
+      nameKo: '하둠의 사도 출몰 지점',
+      nameEn: 'Hadum Apostle Spawn',
+      bossSlug: 'hadum-apostle',
+      isMissable: false,
+      isVerified: true,
+      notes: '밤에만 출현. 어둠 속성 저항 권장.',
+    },
+    {
+      slug: 'thornwood-bell-1',
+      type: 'BELL' as const,
+      region: 'THORNWOOD' as const,
+      x: 760, y: 205,
+      nameKo: '어둠의 숲 종각',
+      nameEn: 'Dark Forest Bell',
+      bossSlug: null,
+      isMissable: false,
+      isVerified: false,
+      notes: null,
+    },
+    {
+      slug: 'thornwood-tablet-1',
+      type: 'TABLET' as const,
+      region: 'THORNWOOD' as const,
+      x: 1105, y: 445,
+      nameKo: '하둠의 예언 석판',
+      nameEn: 'Prophecy of Hadum',
+      bossSlug: null,
+      isMissable: false,
+      isVerified: true,
+      notes: '해독 시 보스 전술 정보 공개.',
+    },
+
+    // ── 잿빛 황야 ─────────────────────────────────
+    {
+      slug: 'ashen-boss-spawn',
+      type: 'BOSS_SPAWN' as const,
+      region: 'ASHEN_WASTES' as const,
+      x: 1560, y: 685,
+      nameKo: '칼크 출몰 지점',
+      nameEn: 'Khalk Spawn',
+      bossSlug: 'khalk',
+      isMissable: false,
+      isVerified: true,
+      notes: '용암 근처 고지대. 화염 저항 장비 필수.',
+    },
+    {
+      slug: 'ashen-artifact-1',
+      type: 'ARTIFACT' as const,
+      region: 'ASHEN_WASTES' as const,
+      x: 1385, y: 460,
+      nameKo: '잿빛 독수리상',
+      nameEn: 'Ashen Eagle Idol',
+      bossSlug: null,
+      isMissable: false,
+      isVerified: true,
+      notes: null,
+    },
+    {
+      slug: 'ashen-viewpoint-1',
+      type: 'VIEWPOINT' as const,
+      region: 'ASHEN_WASTES' as const,
+      x: 1840, y: 520,
+      nameKo: '황야 절벽 전망대',
+      nameEn: 'Wasteland Cliff Viewpoint',
+      bossSlug: null,
+      isMissable: false,
+      isVerified: false,
+      notes: '지역 최북단. 이동 수단 필요.',
+    },
+
+    // ── 설원 고원 ─────────────────────────────────
+    {
+      slug: 'frozen-boss-spawn',
+      type: 'BOSS_SPAWN' as const,
+      region: 'FROZEN_HIGHLANDS' as const,
+      x: 1225, y: 1475,
+      nameKo: '폭주 서리 거인 출몰 지점',
+      nameEn: 'Frenzied Frost Giant Spawn',
+      bossSlug: 'frost-giant-berserk',
+      isMissable: false,
+      isVerified: true,
+      notes: '눈보라 동안 공격력 증가.',
+    },
+    {
+      slug: 'frozen-bell-1',
+      type: 'BELL' as const,
+      region: 'FROZEN_HIGHLANDS' as const,
+      x: 895, y: 1210,
+      nameKo: '설원 신전의 종',
+      nameEn: 'Tundra Temple Bell',
+      bossSlug: null,
+      isMissable: false,
+      isVerified: true,
+      notes: null,
+    },
+    {
+      slug: 'frozen-bell-2',
+      type: 'BELL' as const,
+      region: 'FROZEN_HIGHLANDS' as const,
+      x: 1415, y: 1285,
+      nameKo: '빙하 교회 종',
+      nameEn: 'Glacier Church Bell',
+      bossSlug: null,
+      isMissable: true,
+      isVerified: true,
+      notes: '특정 퀘스트 완료 후에만 접근 가능.',
+    },
+    {
+      slug: 'frozen-npc-1',
+      type: 'NPC' as const,
+      region: 'FROZEN_HIGHLANDS' as const,
+      x: 1060, y: 1355,
+      nameKo: '설원의 현자',
+      nameEn: 'Tundra Sage',
+      bossSlug: null,
+      isMissable: false,
+      isVerified: true,
+      notes: '희귀 아이템 교환 및 스킬 강화 가능.',
+    },
+
+    // ── 녹지 해안 ─────────────────────────────────
+    {
+      slug: 'verdant-boss-spawn',
+      type: 'BOSS_SPAWN' as const,
+      region: 'VERDANT_COAST' as const,
+      x: 385, y: 1685,
+      nameKo: '심해 해룡 출몰 지점',
+      nameEn: 'Deep Sea Wyrm Spawn',
+      bossSlug: 'sea-serpent-boss',
+      isMissable: false,
+      isVerified: true,
+      notes: '해안 절벽 아래 해역. 조류 주의.',
+    },
+    {
+      slug: 'verdant-tablet-1',
+      type: 'TABLET' as const,
+      region: 'VERDANT_COAST' as const,
+      x: 195, y: 1390,
+      nameKo: '해룡 전설 석판',
+      nameEn: 'Sea Wyrm Legend Tablet',
+      bossSlug: null,
+      isMissable: false,
+      isVerified: true,
+      notes: null,
+    },
+    {
+      slug: 'verdant-tablet-2',
+      type: 'TABLET' as const,
+      region: 'VERDANT_COAST' as const,
+      x: 655, y: 1605,
+      nameKo: '항구 기록 석판',
+      nameEn: 'Harbor Records Tablet',
+      bossSlug: null,
+      isMissable: false,
+      isVerified: false,
+      notes: null,
+    },
+    {
+      slug: 'verdant-dungeon-1',
+      type: 'DUNGEON' as const,
+      region: 'VERDANT_COAST' as const,
+      x: 510, y: 1870,
+      nameKo: '해저 동굴 입구',
+      nameEn: 'Undersea Cavern',
+      bossSlug: null,
+      isMissable: false,
+      isVerified: true,
+      notes: '수중 이동 스킬 또는 장비 필요.',
+    },
+  ]
+
+  let markerCount = 0
+  for (const data of markerData) {
+    const bossId = data.bossSlug ? (bossMap[data.bossSlug] ?? null) : null
+    await prisma.mapMarker.upsert({
+      where: { id: `seed-${data.slug}` },
+      update: {},
+      create: {
+        id: `seed-${data.slug}`,
+        type: data.type,
+        region: data.region,
+        x: data.x,
+        y: data.y,
+        nameKo: data.nameKo,
+        nameEn: data.nameEn,
+        isMissable: data.isMissable,
+        isVerified: data.isVerified,
+        notes: data.notes,
+        ...(bossId ? { bossId } : {}),
+      },
+    })
+    markerCount++
+  }
+  console.log(`✅ 지도 마커 ${markerCount}개 생성`)
+
   console.log('\n🎉 시드 완료!')
 }
 
