@@ -1,6 +1,16 @@
 import { prisma } from '@red-desert/db'
 import type { BuildCardData } from '@red-desert/ui/build/card'
 
+const VALID_CHARACTERS = ['KLIFF', 'DAMIANE', 'OONGKA'] as const
+const VALID_WEAPONS = [
+  'SWORD_SHIELD', 'GREATSWORD', 'SPEAR', 'DAGGER', 'BOW',
+  'CROSSBOW', 'STAFF', 'SCYTHE', 'HAMMER', 'FLAIL', 'TWIN_SWORDS',
+  'BARE_HANDS', 'SPECIAL',
+] as const
+
+type ValidCharacter = typeof VALID_CHARACTERS[number]
+type ValidWeapon   = typeof VALID_WEAPONS[number]
+
 export type BuildListFilter = {
   character?: string
   weapon?: string
@@ -8,10 +18,18 @@ export type BuildListFilter = {
 }
 
 export async function getBuildList(filter: BuildListFilter = {}): Promise<BuildCardData[]> {
+  // 허용되지 않은 enum 값은 조용히 무시 (Prisma에 잘못된 값 전달 방지)
+  const character = VALID_CHARACTERS.includes(filter.character as ValidCharacter)
+    ? (filter.character as ValidCharacter)
+    : undefined
+  const weapon = VALID_WEAPONS.includes(filter.weapon as ValidWeapon)
+    ? (filter.weapon as ValidWeapon)
+    : undefined
+
   const builds = await prisma.build.findMany({
     where: {
-      ...(filter.character ? { character: filter.character as never } : {}),
-      ...(filter.weapon ? { weaponPrimary: filter.weapon as never } : {}),
+      ...(character ? { character } : {}),
+      ...(weapon ? { weaponPrimary: weapon } : {}),
     },
     include: {
       _count: { select: { skills: true } },

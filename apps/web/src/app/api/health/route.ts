@@ -31,14 +31,10 @@ export async function GET() {
       timestamp: new Date().toISOString(),
     })
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Unknown error'
+    // 내부 로그에만 상세 오류 기록 (클라이언트에 DB 정보 노출 금지)
+    console.error('[health] DB connection error:', error)
     return NextResponse.json(
-      {
-        status: 'error',
-        db: 'disconnected',
-        error: message,
-        hint: '.env.local의 DATABASE_URL을 확인하세요.',
-      },
+      { status: 'error', db: 'disconnected' },
       { status: 503 },
     )
   }

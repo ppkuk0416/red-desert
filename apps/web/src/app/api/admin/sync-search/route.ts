@@ -9,10 +9,16 @@ import { syncAllToSearch } from '@/lib/search/sync'
  * 새 데이터 대량 입력 후 또는 인덱스 설정 변경 후 수동 호출.
  */
 export async function POST(request: NextRequest) {
-  const authHeader = request.headers.get('authorization')
   const adminSecret = process.env.ADMIN_SECRET
 
-  if (!adminSecret || authHeader !== `Bearer ${adminSecret}`) {
+  // ADMIN_SECRET 미설정 시 서버 오류로 처리 (조용히 열린 상태 방지)
+  if (!adminSecret) {
+    console.error('[sync-search] ADMIN_SECRET is not configured')
+    return NextResponse.json({ error: 'Service misconfigured' }, { status: 503 })
+  }
+
+  const authHeader = request.headers.get('authorization')
+  if (authHeader !== `Bearer ${adminSecret}`) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
@@ -27,7 +33,8 @@ export async function POST(request: NextRequest) {
       durationMs: ms,
     })
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Unknown error'
-    return NextResponse.json({ error: message }, { status: 500 })
+    // 내부 오류 상세 정보는 로그에만 기록
+    console.error('[sync-search] Sync failed:', error)
+    return NextResponse.json({ error: 'Sync failed' }, { status: 500 })
   }
 }

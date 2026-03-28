@@ -11,11 +11,20 @@ import type { SearchHit } from '@/lib/search/types'
  * 멀티 인덱스 검색으로 보스/아이템 동시 검색 후
  * relevance 기준 병합 반환
  */
+const VALID_SEARCH_TYPES = ['boss', 'item', 'all'] as const
+type SearchType = typeof VALID_SEARCH_TYPES[number]
+
 export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl
   const q = searchParams.get('q')?.trim()
-  const type = searchParams.get('type') ?? 'all'
-  const limit = Math.min(Number(searchParams.get('limit') ?? 10), 20)
+
+  const rawType = searchParams.get('type') ?? 'all'
+  const type: SearchType = VALID_SEARCH_TYPES.includes(rawType as SearchType)
+    ? (rawType as SearchType)
+    : 'all'
+
+  const rawLimit = Number(searchParams.get('limit') ?? 10)
+  const limit = Number.isFinite(rawLimit) ? Math.min(Math.max(rawLimit, 1), 20) : 10
 
   if (!q || q.length < 1) {
     return NextResponse.json({ hits: [], query: '', processingTimeMs: 0 })
