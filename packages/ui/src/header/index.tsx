@@ -9,9 +9,10 @@ const NAV_ITEMS = ['boss', 'item', 'map', 'build'] as const
 
 type Props = {
   onSearchOpen?: () => void
+  userSlot?: React.ReactNode
 }
 
-export function Header({ onSearchOpen }: Props) {
+export function Header({ onSearchOpen, userSlot }: Props) {
   const t = useTranslations('Nav')
   const locale = useLocale()
   const [menuOpen, setMenuOpen] = useState(false)
@@ -69,6 +70,9 @@ export function Header({ onSearchOpen }: Props) {
           )}
 
           <LocaleSwitcher />
+
+          {/* 유저 메뉴 슬롯 (앱 레이어에서 주입) */}
+          {userSlot}
 
           {/* 모바일 햄버거 */}
           <button

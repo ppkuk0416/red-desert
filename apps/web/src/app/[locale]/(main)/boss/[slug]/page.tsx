@@ -4,6 +4,8 @@ import { getBossDetail, getAllBossSlugs } from '@/lib/queries/boss'
 import { Badge } from '@red-desert/ui/components/Badge'
 import { DifficultyStars } from '@red-desert/ui/components/DifficultyStars'
 import { DropTable } from '@/components/boss/DropTable'
+import { ContributeDropRate } from '@/components/boss/ContributeDropRate'
+import { RespawnTimer } from '@/components/boss/RespawnTimer'
 
 type Props = {
   params: Promise<{ locale: string; slug: string }>
@@ -171,7 +173,21 @@ export default async function BossDetailPage({ params }: Props) {
         )}
       </section>
 
-      {/* 공략 팁 (TODO: 커뮤니티 기여 영역) */}
+      {/* 사이드 위젯 영역 */}
+      <div className="grid gap-4 sm:grid-cols-2 mb-10">
+        <RespawnTimer bossId={boss.id} respawnMinutes={boss.respawnMinutes ?? null} />
+        <ContributeDropRate
+          bossId={boss.id}
+          drops={boss.drops.map((d) => ({
+            itemId: d.item.id,
+            nameKo: d.item.nameKo,
+            nameEn: d.item.nameEn,
+          }))}
+          locale={locale}
+        />
+      </div>
+
+      {/* 공략 팁 */}
       <section>
         <h2 className="mb-4 text-xl font-bold text-stone-100">공략 팁</h2>
         <div className="rounded-xl border border-dashed border-stone-700 p-8 text-center text-stone-600">

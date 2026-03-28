@@ -101,6 +101,18 @@ enum BuildPlaystyle {
   EXPLORER
 }
 
+enum ContributionType {
+  DROP_RATE
+  MAP_MARKER
+  BOSS_TIP
+}
+
+enum ContributionStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
 // ─────────────────────────────────────────────
 // Boss
 // ─────────────────────────────────────────────
@@ -119,6 +131,7 @@ model Boss {
   weaknesses    WeaponType[]
   drops         BossDrop[]
   mapMarkers    MapMarker[]
+  respawnMinutes Int?                       // 리젠 시간 (분), null = 미확인
   communityRating Float?       @default(0)
   viewCount     Int            @default(0)
   isVerified    Boolean        @default(false)
@@ -263,4 +276,22 @@ model BuildSkill {
   order   Int    @default(0)
 
   @@index([buildId])
+}
+
+// ─────────────────────────────────────────────
+// 커뮤니티 기여
+// ─────────────────────────────────────────────
+
+model Contribution {
+  id        String             @id @default(cuid())
+  type      ContributionType
+  status    ContributionStatus @default(PENDING)
+  userId    String?            // Supabase auth UID (익명 허용)
+  targetId  String             // bossId / itemId 등
+  data      Json               // 제보 내용 자유 형식
+  note      String?            // 제보자 메모
+  createdAt DateTime           @default(now())
+
+  @@index([type, status])
+  @@index([targetId])
 }
