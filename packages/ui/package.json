@@ -8,6 +8,7 @@
     "./components/*": "./src/components/*.tsx",
     "./boss/card": "./src/boss/BossCard.tsx",
     "./item/card": "./src/item/ItemCard.tsx",
+    "./build/card": "./src/build/BuildCard.tsx",
     "./globals.css": "./src/globals.css"
   },
   "peerDependencies": {

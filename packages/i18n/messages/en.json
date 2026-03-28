@@ -78,6 +78,22 @@
       "description": "Optimal builds and community meta for Crimson Desert characters."
     },
     "title": "Build Planner",
+    "filters": {
+      "all": "All",
+      "character": "Character",
+      "weapon": "Main Weapon"
+    },
+    "sort": {
+      "upvotes": "Most Voted",
+      "latest": "Latest"
+    },
+    "card": {
+      "skills": "skills",
+      "upvotes": "votes",
+      "verified": "Verified",
+      "viewBuild": "View Build"
+    },
+    "empty": "No builds match your filters.",
     "character": {
       "KLIFF": "Kliff",
       "DAMIANE": "Damiane",

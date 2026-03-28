@@ -451,6 +451,137 @@ async function main() {
   }
   console.log(`✅ 지도 마커 ${markerCount}개 생성`)
 
+  // ─────────────────────────────────────────────
+  // 빌드 데이터
+  // ─────────────────────────────────────────────
+  const buildData = [
+    {
+      slug: 'kliff-greatsword-boss-hunter',
+      title: '클리프 대검 보스 사냥 빌드',
+      character: 'KLIFF' as const,
+      weaponPrimary: 'GREATSWORD' as const,
+      weaponSecondary: null,
+      playstyle: 'BOSS_HUNTER' as const,
+      upvotes: 247,
+      isVerified: true,
+      descriptionKo: '클리프의 대검을 활용한 고화력 보스 딜링 빌드. 패리 타이밍에 맞춘 카운터 공격으로 최대 데미지를 뽑아냅니다.',
+      descriptionEn: 'High-damage boss build utilizing Kliff\'s greatsword. Maximize damage through well-timed parry counters.',
+      skills: [
+        { skillId: 'heavy_slash',     level: 5, order: 1 },
+        { skillId: 'uppercut',        level: 5, order: 2 },
+        { skillId: 'ground_slam',     level: 4, order: 3 },
+        { skillId: 'armor_break',     level: 4, order: 4 },
+        { skillId: 'charging_rush',   level: 3, order: 5 },
+        { skillId: 'counter_strike',  level: 5, order: 6 },
+        { skillId: 'spin_attack',     level: 3, order: 7 },
+        { skillId: 'finishing_blow',  level: 5, order: 8 },
+      ],
+    },
+    {
+      slug: 'kliff-sword-shield-main-story',
+      title: '클리프 검+방패 메인 스토리 입문 빌드',
+      character: 'KLIFF' as const,
+      weaponPrimary: 'SWORD_SHIELD' as const,
+      weaponSecondary: null,
+      playstyle: 'MAIN_STORY' as const,
+      upvotes: 183,
+      isVerified: true,
+      descriptionKo: '방어력과 공격력을 균형 있게 갖춘 초보자 친화 빌드. 패리와 방어 스킬로 보스 패턴 학습에 적합합니다.',
+      descriptionEn: 'Beginner-friendly build balancing offense and defense. Great for learning boss patterns with parry and block skills.',
+      skills: [
+        { skillId: 'quick_slash',     level: 4, order: 1 },
+        { skillId: 'shield_bash',     level: 4, order: 2 },
+        { skillId: 'parry',           level: 5, order: 3 },
+        { skillId: 'counter_attack',  level: 4, order: 4 },
+        { skillId: 'block',           level: 5, order: 5 },
+        { skillId: 'power_strike',    level: 3, order: 6 },
+        { skillId: 'rush',            level: 3, order: 7 },
+        { skillId: 'rally',           level: 4, order: 8 },
+      ],
+    },
+    {
+      slug: 'damiane-dagger-explorer',
+      title: '다미아네 단검 탐험가 빌드',
+      character: 'DAMIANE' as const,
+      weaponPrimary: 'DAGGER' as const,
+      weaponSecondary: 'TWIN_SWORDS' as const,
+      playstyle: 'EXPLORER' as const,
+      upvotes: 312,
+      isVerified: true,
+      descriptionKo: '기동성과 암살 능력을 극대화한 탐험 특화 빌드. 그림자 스텝과 독 공격의 조합으로 빠르게 전투를 마무리합니다.',
+      descriptionEn: 'Mobility-focused exploration build maximizing assassination potential. Combines shadow step and poison attacks for swift combat.',
+      skills: [
+        { skillId: 'shadow_step',     level: 5, order: 1 },
+        { skillId: 'backstab',        level: 5, order: 2 },
+        { skillId: 'poison_edge',     level: 4, order: 3 },
+        { skillId: 'vanish',          level: 5, order: 4 },
+        { skillId: 'quick_draw',      level: 4, order: 5 },
+        { skillId: 'chain_strike',    level: 4, order: 6 },
+        { skillId: 'shadow_clone',    level: 3, order: 7 },
+        { skillId: 'final_cut',       level: 5, order: 8 },
+      ],
+    },
+    {
+      slug: 'oongka-hammer-completionist',
+      title: '웅카 망치 완전 탐색 빌드',
+      character: 'OONGKA' as const,
+      weaponPrimary: 'HAMMER' as const,
+      weaponSecondary: null,
+      playstyle: 'COMPLETIONIST' as const,
+      upvotes: 198,
+      isVerified: false,
+      descriptionKo: '광역 제압과 스턴에 특화된 완전 탐색 빌드. 넓은 공격 범위로 여러 적을 한 번에 처리하여 탐색 효율을 높입니다.',
+      descriptionEn: 'AoE control and stun-focused build for completionists. Wide attack range for clearing multiple enemies efficiently.',
+      skills: [
+        { skillId: 'crushing_blow',   level: 5, order: 1 },
+        { skillId: 'earth_shatter',   level: 5, order: 2 },
+        { skillId: 'thunder_clap',    level: 4, order: 3 },
+        { skillId: 'stun_strike',     level: 4, order: 4 },
+        { skillId: 'hammer_throw',    level: 3, order: 5 },
+        { skillId: 'seismic_wave',    level: 5, order: 6 },
+        { skillId: 'iron_fist',       level: 4, order: 7 },
+        { skillId: 'tremor',          level: 3, order: 8 },
+      ],
+    },
+  ]
+
+  for (const data of buildData) {
+    const build = await prisma.build.upsert({
+      where: { slug: data.slug },
+      update: {},
+      create: {
+        slug: data.slug,
+        title: data.title,
+        character: data.character,
+        weaponPrimary: data.weaponPrimary,
+        weaponSecondary: data.weaponSecondary ?? undefined,
+        playstyle: data.playstyle,
+        upvotes: data.upvotes,
+        isVerified: data.isVerified,
+        descriptionKo: data.descriptionKo,
+        descriptionEn: data.descriptionEn,
+      },
+    })
+
+    // Upsert skills
+    for (const skill of data.skills) {
+      await prisma.buildSkill.upsert({
+        where: { id: `seed-${data.slug}-${skill.skillId}` },
+        update: {},
+        create: {
+          id: `seed-${data.slug}-${skill.skillId}`,
+          buildId: build.id,
+          skillId: skill.skillId,
+          level: skill.level,
+          order: skill.order,
+        },
+      })
+    }
+
+    console.log(`  ✅ ${data.title}`)
+  }
+  console.log(`✅ 빌드 ${buildData.length}개 생성`)
+
   console.log('\n🎉 시드 완료!')
 }
 

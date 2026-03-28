@@ -78,6 +78,22 @@
       "description": "붉은사막 캐릭터별 최적 빌드와 커뮤니티 메타 빌드."
     },
     "title": "빌드 플래너",
+    "filters": {
+      "all": "전체",
+      "character": "캐릭터",
+      "weapon": "주 무기"
+    },
+    "sort": {
+      "upvotes": "추천순",
+      "latest": "최신순"
+    },
+    "card": {
+      "skills": "스킬",
+      "upvotes": "추천",
+      "verified": "검증됨",
+      "viewBuild": "빌드 보기"
+    },
+    "empty": "조건에 맞는 빌드가 없습니다.",
     "character": {
       "KLIFF": "클리프",
       "DAMIANE": "다미아네",
