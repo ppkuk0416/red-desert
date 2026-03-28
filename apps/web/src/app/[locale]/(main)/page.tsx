@@ -1,4 +1,4 @@
-import { useTranslations } from 'next-intl'
+import { useTranslations, useLocale } from 'next-intl'
 import { getTranslations } from 'next-intl/server'
 import type { Metadata } from 'next'
 
@@ -18,6 +18,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default function HomePage() {
   const t = useTranslations('HomePage')
+  const locale = useLocale()
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center px-4">
@@ -34,7 +35,7 @@ export default function HomePage() {
           {(['boss', 'item', 'map', 'build'] as const).map((section) => (
             <a
               key={section}
-              href={`/${section}`}
+              href={`/${locale}/${section}`}
               className="group rounded-xl border border-stone-800 bg-stone-900 p-6
                          hover:border-crimson-700 hover:bg-stone-800 transition-all duration-200"
             >

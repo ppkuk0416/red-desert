@@ -3,7 +3,6 @@ import type { ReactNode } from 'react'
 type Props = {
   children: ReactNode
   className?: string
-  href?: string
 }
 
 export function Card({ children, className = '' }: Props) {

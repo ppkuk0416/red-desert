@@ -14,6 +14,8 @@ const securityHeaders = [
   { key: 'X-XSS-Protection', value: '1; mode=block' },
   // 권한 정책 — 불필요한 브라우저 기능 차단
   { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
+  // HSTS — HTTPS 강제 (프로덕션 배포 시 활성화됨, 로컬 http는 브라우저가 무시)
+  { key: 'Strict-Transport-Security', value: 'max-age=31536000; includeSubDomains' },
 ]
 
 const nextConfig: NextConfig = {

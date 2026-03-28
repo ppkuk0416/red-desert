@@ -32,7 +32,7 @@ export default async function ItemListPage({ params, searchParams }: Props) {
       </div>
 
       {/* 검색 + 필터 */}
-      <Suspense>
+      <Suspense fallback={<div className="mb-6 h-10 rounded-xl bg-stone-800/50 animate-pulse" />}>
         <ItemFilters locale={locale} />
       </Suspense>
 

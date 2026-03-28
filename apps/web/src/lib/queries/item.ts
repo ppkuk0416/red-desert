@@ -2,6 +2,11 @@ import { prisma } from '@red-desert/db'
 import type { ItemCategory, ItemRarity } from '@red-desert/db'
 import type { ItemCardData } from '@red-desert/ui/item/card'
 
+const VALID_CATEGORIES: ItemCategory[] = [
+  'WEAPON', 'ARMOR', 'MATERIAL', 'CONSUMABLE', 'ABYSS_ARTIFACT', 'COLLECTIBLE', 'QUEST', 'TRADE_GOOD',
+]
+const VALID_RARITIES: ItemRarity[] = ['COMMON', 'UNCOMMON', 'RARE', 'EPIC', 'LEGENDARY']
+
 type ItemListFilter = {
   q?: string
   category?: string
@@ -9,6 +14,13 @@ type ItemListFilter = {
 }
 
 export async function getItemList(filter: ItemListFilter): Promise<ItemCardData[]> {
+  const category = VALID_CATEGORIES.includes(filter.category as ItemCategory)
+    ? (filter.category as ItemCategory)
+    : undefined
+  const rarity = VALID_RARITIES.includes(filter.rarity as ItemRarity)
+    ? (filter.rarity as ItemRarity)
+    : undefined
+
   const items = await prisma.item.findMany({
     where: {
       ...(filter.q && {
@@ -17,8 +29,8 @@ export async function getItemList(filter: ItemListFilter): Promise<ItemCardData[
           { nameEn: { contains: filter.q, mode: 'insensitive' } },
         ],
       }),
-      ...(filter.category && { category: filter.category as ItemCategory }),
-      ...(filter.rarity && { rarity: filter.rarity as ItemRarity }),
+      ...(category && { category }),
+      ...(rarity && { rarity }),
     },
     include: {
       _count: {

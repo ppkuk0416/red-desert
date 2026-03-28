@@ -2,6 +2,10 @@ import { prisma } from '@red-desert/db'
 import type { Region } from '@red-desert/db'
 import type { BossCardData } from '@red-desert/ui/boss/card'
 
+const VALID_REGIONS: Region[] = [
+  'PYWEL_CASTLE', 'THORNWOOD', 'ASHEN_WASTES', 'FROZEN_HIGHLANDS', 'VERDANT_COAST',
+]
+
 type BossListFilter = {
   q?: string
   region?: string
@@ -9,6 +13,17 @@ type BossListFilter = {
 }
 
 export async function getBossList(filter: BossListFilter): Promise<BossCardData[]> {
+  const region = VALID_REGIONS.includes(filter.region as Region)
+    ? (filter.region as Region)
+    : undefined
+  const difficulty =
+    filter.difficulty !== undefined &&
+    Number.isInteger(filter.difficulty) &&
+    filter.difficulty >= 1 &&
+    filter.difficulty <= 5
+      ? filter.difficulty
+      : undefined
+
   const bosses = await prisma.boss.findMany({
     where: {
       ...(filter.q && {
@@ -17,8 +32,8 @@ export async function getBossList(filter: BossListFilter): Promise<BossCardData[
           { nameEn: { contains: filter.q, mode: 'insensitive' } },
         ],
       }),
-      ...(filter.region && { region: filter.region as Region }),
-      ...(filter.difficulty && { difficulty: filter.difficulty }),
+      ...(region && { region }),
+      ...(difficulty && { difficulty }),
     },
     include: {
       _count: { select: { drops: true } },

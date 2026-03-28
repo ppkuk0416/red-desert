@@ -30,6 +30,11 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ hits: [], query: '', processingTimeMs: 0 })
   }
 
+  // 과도하게 긴 쿼리 차단 (Meilisearch 부하 방지)
+  if (q.length > 100) {
+    return NextResponse.json({ hits: [], query: q.slice(0, 100), processingTimeMs: 0 })
+  }
+
   try {
     const searchOptions = {
       limit,
