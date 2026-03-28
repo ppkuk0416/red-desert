@@ -16,9 +16,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     if (!boss) return {}
 
     const name = locale === 'ko' ? boss.nameKo : boss.nameEn
+    const desc = `${name} 보스 약점, 드랍 아이템, 공략 가이드. 메커닉: ${boss.mechanics.join(', ')}`
+    const ogImage = `/api/og?title=${encodeURIComponent(name)}&subtitle=${encodeURIComponent(desc)}&type=boss`
     return {
       title: `${name} 공략`,
-      description: `${name} 보스 약점, 드랍 아이템, 공략 가이드. 메커닉: ${boss.mechanics.join(', ')}`,
+      description: desc,
+      openGraph: {
+        title: `${name} 공략 | 붉은사막 DB`,
+        description: desc,
+        images: [{ url: ogImage, width: 1200, height: 630 }],
+      },
+      twitter: { card: 'summary_large_image', images: [ogImage] },
     }
   } catch {
     return {}
