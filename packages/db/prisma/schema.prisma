@@ -247,24 +247,30 @@ model MapMarker {
 // ─────────────────────────────────────────────
 
 model Build {
-  id             String         @id @default(cuid())
-  slug           String         @unique
-  title          String
-  character      Character
-  weaponPrimary  WeaponType
+  id              String         @id @default(cuid())
+  slug            String         @unique
+  title           String
+  character       Character
+  weaponPrimary   WeaponType
   weaponSecondary WeaponType?
-  skills         BuildSkill[]
-  playstyle      BuildPlaystyle
-  descriptionKo  String?
-  descriptionEn  String?
-  authorId       String?
-  upvotes        Int            @default(0)
-  isVerified     Boolean        @default(false)
-  createdAt      DateTime       @default(now())
-  updatedAt      DateTime       @updatedAt
+  skills          BuildSkill[]
+  playstyle       BuildPlaystyle
+  descriptionKo   String?
+  descriptionEn   String?
+  author          UserProfile?   @relation(fields: [authorId], references: [id], onDelete: SetNull)
+  authorId        String?
+  upvotes         Int            @default(0)
+  isVerified      Boolean        @default(false)
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  likes           Like[]
+  bookmarks       Bookmark[]
+  comments        Comment[]
 
   @@index([character])
   @@index([weaponPrimary])
+  @@index([authorId])
 }
 
 model BuildSkill {
@@ -279,6 +285,70 @@ model BuildSkill {
 }
 
 // ─────────────────────────────────────────────
+// 유저
+// ─────────────────────────────────────────────
+
+model UserProfile {
+  id          String    @id  // Supabase auth UID
+  username    String    @unique
+  avatarUrl   String?
+  bio         String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  builds      Build[]
+  likes       Like[]
+  bookmarks   Bookmark[]
+  comments    Comment[]
+  contributions Contribution[]
+
+  @@index([username])
+}
+
+// ─────────────────────────────────────────────
+// 소셜
+// ─────────────────────────────────────────────
+
+model Like {
+  id        String   @id @default(cuid())
+  user      UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  build     Build    @relation(fields: [buildId], references: [id], onDelete: Cascade)
+  buildId   String
+  createdAt DateTime @default(now())
+
+  @@unique([userId, buildId])
+  @@index([buildId])
+}
+
+model Bookmark {
+  id        String   @id @default(cuid())
+  user      UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  build     Build    @relation(fields: [buildId], references: [id], onDelete: Cascade)
+  buildId   String
+  createdAt DateTime @default(now())
+
+  @@unique([userId, buildId])
+  @@index([userId])
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  user      UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  build     Build    @relation(fields: [buildId], references: [id], onDelete: Cascade)
+  buildId   String
+  content   String   @db.VarChar(1000)
+  isDeleted Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([buildId])
+  @@index([userId])
+}
+
+// ─────────────────────────────────────────────
 // 커뮤니티 기여
 // ─────────────────────────────────────────────
 
@@ -286,6 +356,7 @@ model Contribution {
   id        String             @id @default(cuid())
   type      ContributionType
   status    ContributionStatus @default(PENDING)
+  user      UserProfile?       @relation(fields: [userId], references: [id], onDelete: SetNull)
   userId    String?            // Supabase auth UID (익명 허용)
   targetId  String             // bossId / itemId 등
   data      Json               // 제보 내용 자유 형식
@@ -294,4 +365,5 @@ model Contribution {
 
   @@index([type, status])
   @@index([targetId])
+  @@index([userId])
 }

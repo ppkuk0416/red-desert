@@ -29,13 +29,21 @@ export default async function BuildPage({ params, searchParams }: Props) {
   return (
     <div className="mx-auto max-w-6xl px-4 py-10">
       {/* Header */}
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold text-stone-100">{t('title')}</h1>
-        <p className="mt-1 text-sm text-stone-500">
-          {builds.length > 0
-            ? `${builds.length}개 빌드`
-            : '커뮤니티 빌드를 탐색하고 나만의 최적 빌드를 찾아보세요.'}
-        </p>
+      <div className="mb-6 flex items-start justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-stone-100">{t('title')}</h1>
+          <p className="mt-1 text-sm text-stone-500">
+            {builds.length > 0
+              ? `${builds.length}개 빌드`
+              : '커뮤니티 빌드를 탐색하고 나만의 최적 빌드를 찾아보세요.'}
+          </p>
+        </div>
+        <a
+          href={`/${locale}/build/new`}
+          className="shrink-0 rounded-lg bg-crimson-700 px-4 py-2 text-sm font-semibold text-white hover:bg-crimson-600 transition-colors"
+        >
+          + 빌드 작성
+        </a>
       </div>
 
       {/* Filters — wrapped in Suspense (useSearchParams requirement) */}
