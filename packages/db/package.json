@@ -8,9 +8,12 @@
     "./types": "./src/types.ts"
   },
   "scripts": {
+    "build": "prisma generate",
+    "postinstall": "prisma generate",
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
     "db:migrate": "prisma migrate dev",
+    "db:migrate:deploy": "prisma migrate deploy",
     "db:studio": "prisma studio",
     "db:seed": "tsx prisma/seed.ts"
   },

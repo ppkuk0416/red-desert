@@ -2,7 +2,7 @@ import type { MetadataRoute } from 'next'
 import { getAllBossSlugs } from '@/lib/queries/boss'
 import { getAllItemSlugs } from '@/lib/queries/item'
 
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://red-desert.gg'
+const BASE_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'https://red-desert.gg'
 const LOCALES = ['ko', 'en'] as const
 
 type SitemapEntry = MetadataRoute.Sitemap[number]

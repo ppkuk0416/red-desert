@@ -30,11 +30,12 @@ const nextConfig: NextConfig = {
   },
   images: {
     remotePatterns: [
-      {
-        protocol: 'https',
-        // 프로젝트 전용 서브도메인으로 한정 (빌드 시 환경변수로 주입 권장)
-        hostname: '*.supabase.co',
-      },
+      // Supabase Storage (아이템/보스 이미지)
+      { protocol: 'https', hostname: '*.supabase.co' },
+      // Google OAuth 아바타
+      { protocol: 'https', hostname: 'lh3.googleusercontent.com' },
+      // Discord OAuth 아바타
+      { protocol: 'https', hostname: 'cdn.discordapp.com' },
     ],
   },
   experimental: {

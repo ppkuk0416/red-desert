@@ -17,6 +17,9 @@
     "type-check": {
       "dependsOn": ["^build"]
     },
+    "db:migrate:deploy": {
+      "cache": false
+    },
     "clean": {
       "cache": false
     }

@@ -6,7 +6,7 @@ import { routing } from '@/i18n/routing'
 import { SearchProvider } from '@/components/search/SearchProvider'
 import '../globals.css'
 
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://red-desert.gg'
+const BASE_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'https://red-desert.gg'
 
 type Props = {
   children: React.ReactNode
